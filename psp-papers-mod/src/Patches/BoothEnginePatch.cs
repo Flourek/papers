@@ -3,6 +3,7 @@ using HarmonyLib;
 using Il2CppSystem;
 using play.day;
 using psp_papers_mod.MonoBehaviour;
+using psp_papers_mod;
 using psp_papers_mod.Twitch;
 using psp_papers_mod.Utils;
 
@@ -51,17 +52,23 @@ public class BoothEnginePatch {
     private static bool SpeakPrefix(ref string text, bool fromInspector) {
         PapersPSP.Log.LogInfo($"Character Speaking: \"{text}\" Inspector: {fromInspector}");
 
+
         if (text.StartsWith("__override__")) {
             text = text.Replace("__override__", "");
             return true;
         }
 
+
         return fromInspector && text == "Papers, please.";
     }
 
     public static void Speak(string text, bool inspector = false) {
+
         UnityThreadInvoker.Invoke(() => {
+            EmotePapers.GivePaperIfEmote(text);
+            
             string message = $"__override__{text}";
+
             BoothEngine.speak(message, inspector);
             if (!inspector) {
                 BoothEngine.opQue.push(new Op_SAY(message), new Boolean { m_value = true }.BoxIl2CppObject());
