@@ -34,6 +34,8 @@ public class TravelerNamePatch {
             BorderPatch.Border.tranqRifleButton.set_state(State.OFF);
 
             BoothEnginePatch.GivePaperNow(BorderPatch.Border.killRifleButton.keyDeskItemId);
+            BoothEnginePatch.GivePaperNow("Case");
+
             //BoothEnginePatch.GivePaperNow(BorderPatch.Border.tranqRifleButton.keyDeskItemId);
         }
 

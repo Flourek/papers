@@ -23,7 +23,7 @@ public class DeskItemPatch {
     [HarmonyPrefix]
     [HarmonyPatch("startRevealAnim", typeof(PointData) )]
     static bool preventReveal(PointData mountPos) {
-        if (deskItem.id.StartsWith("emoteBlank")) return false;
+        if (deskItem.id.StartsWith("emoteBlank") || deskItem.id == "Poison") return false;
 
         return true; 
     }

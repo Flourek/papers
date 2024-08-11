@@ -24,6 +24,12 @@ public class BoothPatch {
         Paper paper = BorderPatch.Border.booth.autoFindPaper(deskItem.id);
         paper.def.stay = mounted ? Stay.DAY : Stay.NONE;
     }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch("engine_onPaperPageUpdated", typeof(string))]
+    private static void onPaperPageUpdated(string idWithIndex) {
+        PapersPSP.Log.LogWarning(idWithIndex);
+    }
 }
 public class ConsoleClockPatch {
     

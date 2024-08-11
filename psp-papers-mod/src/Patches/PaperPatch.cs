@@ -15,5 +15,24 @@ public class PaperPatch {
     static void CtorPostfix(PaperDef def_, int multiPaperIndex_) {
         Console.Out.WriteLine("PAPER!!! " + def_.id + " : " + def_.outerImageName  + " : " + def_.mountImageName  + " : " + multiPaperIndex_);
     }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch("playSoundTurnPage")]
+    static void eeee(Paper __instance) {
+
+        if (__instance.idWithIndex == "Case") {
+            PapersPSP.Log.LogWarning("buh " + __instance.idWithIndex);
+            BoothEnginePatch.GivePaperNow("emoteBlank");
+            Paper paper = BorderPatch.Border.booth.autoFindPaper("emoteBlank");
+            paper.def.reveal = new Reveal_ONDESK(120, 2);
+            string newId = "droplule";
+            paper.idWithIndex = newId;
+            paper.deskItem.id = newId;
+            paper.deskItem.idWithIndex = newId;
+            var point = new app.vis.PointData(0, 0);
+            paper.deskItem.startRevealAnim(point);
+        }
+
+    }
 
 }
