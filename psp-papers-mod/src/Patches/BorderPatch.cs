@@ -79,8 +79,8 @@ public static class RifleButtonPatch {
         if (__instance.isTranq || !__instance.selected || __instance.stater.curState.name != "unlocked") return true;
         Rect rect = __instance.rifleNormalSprite.hitRect(false.ToIl2CppBoxed());
         if (!input.checkPointerJustDown(__instance, __instance.worldPos(), rect, null)) return true;
-        
         __instance.set_selected(false);
+        
         return false;
 
     }

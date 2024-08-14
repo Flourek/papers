@@ -48,6 +48,48 @@
 		</page>
 	</paper>
 
+	<paper id="Juh" outer="animated/juh_001.png" font="regular" textcolor="0x5a5559" reveal="fromslot" inspectable="false" oddshape="true" canpinch="true">
+		<page id="1" image="animated/juh_001.png"></page>
+		<page id="2" image="animated/juh_002.png"></page>
+		<page id="3" image="animated/juh_003.png"></page>
+		<page id="4" image="animated/juh_004.png"></page>
+		<page id="5" image="animated/juh_005.png"></page>
+		<page id="6" image="animated/juh_006.png"></page>
+		<page id="7" image="animated/juh_007.png"></page>
+		<page id="8" image="animated/juh_008.png"></page>
+		<page id="9" image="animated/juh_009.png"></page>
+		<page id="10" image="animated/juh_010.png"></page>
+		<page id="11" image="animated/juh_011.png"></page>
+		<page id="12" image="animated/juh_012.png"></page>
+		<page id="13" image="animated/juh_013.png"></page>
+		<page id="14" image="animated/juh_014.png"></page>
+		<page id="15" image="animated/juh_015.png"></page>
+		<page id="16" image="animated/juh_016.png"></page>
+		<page id="17" image="animated/juh_017.png"></page>
+		<page id="18" image="animated/juh_018.png"></page>
+		<page id="19" image="animated/juh_019.png"></page>
+		<page id="20" image="animated/juh_020.png"></page>
+		<page id="21" image="animated/juh_021.png"></page>
+	</paper>
+
+
+
+
+
+
+
+
+	<!-- Coin, pages in order of the animation -->
+	<paper id="Coin" outer="animated/coinHeads.png" font="regular" textcolor="0x5a5559" reveal="ondesk:100,50" inspectable="false">
+		<page id="heads" 		image="animated/coinHeadsAlt.png"> 		<mark image="BLANK:40x40" link="tails" pos="0 0"/> </page>
+		<page id="headsAngleL" 	image="animated/headsAngleL.png">	<mark image="BLANK:40x40" link="" pos="0 0"/> </page>
+		<page id="side" 		image="animated/coinSide.png">			<mark image="BLANK:40x40" link="heads" pos="0 0"/> </page>
+		<page id="tailsAngleR" 	image="animated/tailsAngleR.png">		<mark image="BLANK:40x40" link="" pos="0 0"/> </page>
+		<page id="tails" 		image="animated/coinTailsAlt.png"> 		<mark image="BLANK:40x40" link="heads" pos="0 0"/> </page>
+		<page id="tailsAngleL" 	image="animated/tailsAngleL.png">		<mark image="BLANK:40x40" link="" pos="0 0"/> </page>
+		<page id="side2" 		image="animated/coinSide.png">			<mark image="BLANK:40x40" link="heads" pos="0 0"/> </page>
+		<page id="headsAngleR" 	image="animated/headsAngleR.png">		<mark image="BLANK:40x40" link="" pos="0 0"/> </page>
+	</paper>
 
 
 

@@ -1,4 +1,5 @@
 using app.ent;
+using app.vis;
 using data;
 using HarmonyLib;
 using Il2CppSystem;
@@ -21,16 +22,26 @@ public class PaperPatch {
     static void eeee(Paper __instance) {
 
         if (__instance.idWithIndex == "Case") {
-            PapersPSP.Log.LogWarning("buh " + __instance.idWithIndex);
-            BoothEnginePatch.GivePaperNow("emoteBlank");
-            Paper paper = BorderPatch.Border.booth.autoFindPaper("emoteBlank");
-            paper.def.reveal = new Reveal_ONDESK(120, 2);
-            string newId = "droplule";
-            paper.idWithIndex = newId;
-            paper.deskItem.id = newId;
-            paper.deskItem.idWithIndex = newId;
-            var point = new app.vis.PointData(0, 0);
-            paper.deskItem.startRevealAnim(point);
+            //PapersPSP.Log.LogWarning("buh " + __instance.idWithIndex);
+            //BoothEnginePatch.GivePaperNow("emoteBlank");
+            //Paper paper = BorderPatch.Border.booth.autoFindPaper("emoteBlank");
+            //paper.def.reveal = new Reveal_ONDESK(120, 2);
+            //string newId = "droplule";
+            //paper.idWithIndex = newId;
+            //paper.deskItem.id = newId;
+            //paper.deskItem.idWithIndex = newId;
+            //var point = new app.vis.PointData(0, 0);
+            //paper.deskItem.startRevealAnim(point);
+        }
+
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch("onClick", typeof(Visual))]
+    static void coinFlip(Paper __instance, Visual hitVisual) {
+
+        if (__instance.idWithIndex == "Coin") {
+            PapersPSP.Log.LogWarning("omajga");
         }
 
     }

@@ -24,7 +24,7 @@ public class TravelerNamePatch {
         BorderPatch.Border.booth.detainButton.set_dropped(true);
 
         // Always display the reason (gagaga) stamp 
-        BorderPatch.Border.booth.stampBar.set_reasonStampEnabled(true);
+        //BorderPatch.Border.booth.stampBar.set_reasonStampEnabled(true);
 
         // Enable sniping & give weapon keys
         if (TotalTravellers++ == 0) {
@@ -34,7 +34,7 @@ public class TravelerNamePatch {
             BorderPatch.Border.tranqRifleButton.set_state(State.OFF);
 
             BoothEnginePatch.GivePaperNow(BorderPatch.Border.killRifleButton.keyDeskItemId);
-            BoothEnginePatch.GivePaperNow("Case");
+            BoothEnginePatch.GivePaperNow("Coin");
 
             //BoothEnginePatch.GivePaperNow(BorderPatch.Border.tranqRifleButton.keyDeskItemId);
         }

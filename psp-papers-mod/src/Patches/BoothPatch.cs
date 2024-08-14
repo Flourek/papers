@@ -1,6 +1,8 @@
 using HarmonyLib;
 using play.day.booth;
+using play.day;
 using data;
+using app.ent;
 
 namespace psp_papers_mod.Patches;
 
@@ -24,7 +26,8 @@ public class BoothPatch {
         Paper paper = BorderPatch.Border.booth.autoFindPaper(deskItem.id);
         paper.def.stay = mounted ? Stay.DAY : Stay.NONE;
     }
-    
+
+
     [HarmonyPostfix]
     [HarmonyPatch("engine_onPaperPageUpdated", typeof(string))]
     private static void onPaperPageUpdated(string idWithIndex) {
