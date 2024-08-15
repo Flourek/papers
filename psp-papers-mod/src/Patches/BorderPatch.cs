@@ -13,27 +13,6 @@ namespace psp_papers_mod.Patches;
 public static class BorderPatch {
 
     public static Border Border;
-    public static bool ThrewGrenade;
-
-    [HarmonyPrefix]
-    [HarmonyPatch("panic")]
-    private static bool AvoidPanic() {
-        return ThrewGrenade;
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch("panicLeavingPersonRight")]
-    private static bool AvoidSinglePanic() {
-        return false;
-    }
-    
-    
-    [HarmonyPrefix]
-    [HarmonyPatch("throwGrenade")]
-    public static void ThrowGrenade() {
-        ThrewGrenade = true;
-        Border.day.setAttackResultWithPriority(AttackResult.FAILED_DIDNOTHING);
-    }
 
     public static void SendChatterRunner() {
         Chatter chatter = PapersPSP.Twitch.FrequentChatters.GetRandomChatter(true);
@@ -46,6 +25,7 @@ public static class BorderPatch {
     [HarmonyPrefix]
     [HarmonyPatch("checkSniped", typeof(Person), typeof(PointData), typeof(string))]
     private static bool SnipedPrefix(Person person, PointData pos, string shotAnim, ref bool __result) {
+        if (Attack.wallBlownUp) return true;
         if (person.id != "waiting" && person.id != "guard0" && person.id != "guard1") return true;
 
         // Killing the people in queue breaks the game

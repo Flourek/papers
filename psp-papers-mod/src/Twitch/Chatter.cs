@@ -235,7 +235,7 @@ namespace psp_papers_mod.Twitch {
         public void Shot() {
             this.Died = true;
 
-            if (TwitchIntegration.ActiveAttacker == this && !BorderPatch.ThrewGrenade) {
+            if (TwitchIntegration.ActiveAttacker == this && !AttackBorderPatch.ThrewGrenade) {
                 TwitchIntegration.ActiveAttacker = null;
                 TwitchIntegration.ActiveAttackerPerson = null;
             }

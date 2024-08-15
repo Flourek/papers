@@ -36,6 +36,41 @@ public static class Commands {
     public static void Attack(Chatter sender, ChatMessage chatMessage, string[] args) {
         sender.WantsAttack();
     }
+    
+    [ChatCommand("forceattack")]
+    public static void ForceAttack(Chatter sender, ChatMessage chatMessage, string[] args) {
+        if (!sender.Moderator && !sender.Streamer)
+            return;
+
+        string attack = args[0].ToLower();
+        switch (attack) {
+            case "truck":
+                Patches.Attack.Truck();
+                break;
+            case "bike":
+                Patches.Attack.Bike();
+                break;
+            case "bikerunner":
+                Patches.Attack.BikeRunner();
+                break;
+            case "raid":
+                Patches.Attack.Raid();
+                break;
+            case "runner":
+                Patches.Attack.Runner();
+                break;
+            case "allatonce":
+                Patches.Attack.BikeRunner();
+                Patches.Attack.Runner();
+                Patches.Attack.Truck();
+                Patches.Attack.Raid();
+                break;
+            default:
+                chatMessage.Reply("Invalid attack! Try: truck, bike, bikerunner, raid, runner, AllAtOnce okak");
+                break;
+        }
+        
+    }
 
     // todo; PAP-23
     [ChatCommand("bomb")]

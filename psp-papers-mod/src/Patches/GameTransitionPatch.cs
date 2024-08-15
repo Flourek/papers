@@ -27,7 +27,7 @@ public class GameTransitionPatch {
         if (!transitionName.Contains("FADE_TO_ENDLESS_DAY") && !transitionName.Contains("ADVANCE_TO_NEXTDAY")) return;
         
         TravelerNamePatch.Reset();
-        BorderPatch.ThrewGrenade = false;
+        AttackBorderPatch.ThrewGrenade = false;
         TwitchIntegration.ActiveAttacker = null;
         TwitchIntegration.ActiveAttackerPerson = null;
         TwitchIntegration.ChattersPerPerson.Clear();

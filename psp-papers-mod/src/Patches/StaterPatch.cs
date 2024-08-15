@@ -16,8 +16,8 @@ public static class StaterPatch {
         if (border is not { day.endless: not null }) return true;
         if (name != "waiting-to-fade-to-night") return true;
 
-        if (BorderPatch.ThrewGrenade) TwitchIntegration.ActiveChatter = null;
-        return BorderPatch.ThrewGrenade;
+        if (AttackBorderPatch.ThrewGrenade) TwitchIntegration.ActiveChatter = null;
+        return AttackBorderPatch.ThrewGrenade;
     }
 
 }
