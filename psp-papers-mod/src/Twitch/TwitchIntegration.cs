@@ -181,13 +181,13 @@ public class TwitchIntegration {
         }
 
         // User is the "active attacker" and their messages should pop up as the attacker's
-        if (chatter.IsActiveAttacker) {
-            if (ActiveAttackerPerson != null) {
-                BorderPatch.Border.bomberSpeechBubble.pos = ActiveAttackerPerson.pos;
-                BorderPatch.Border.bomberSpeechBubble.dottedLine.visible = false;
-            }
-            BorderPatch.Border.bomberSpeechBubble.showText(e.ChatMessage.Message, 0);
-        }
+        // if (chatter.IsActiveAttacker) {
+        //     if (ActiveAttackerPerson != null) {
+        //         BorderPatch.Border.bomberSpeechBubble.pos = ActiveAttackerPerson.pos;
+        //         BorderPatch.Border.bomberSpeechBubble.dottedLine.visible = false;
+        //     }
+        //     BorderPatch.Border.bomberSpeechBubble.showText(e.ChatMessage.Message, 0);
+        // }
 
         if (NextChatter == null) {
             PrepareNextChatter();

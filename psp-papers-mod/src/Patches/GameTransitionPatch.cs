@@ -28,10 +28,9 @@ public class GameTransitionPatch {
         
         TravelerNamePatch.Reset();
         AttackBorderPatch.ThrewGrenade = false;
-        TwitchIntegration.ActiveAttacker = null;
-        TwitchIntegration.ActiveAttackerPerson = null;
         TwitchIntegration.ChattersPerPerson.Clear();
         TwitchIntegration.PrepareNextChatter();
+        Attack.Reset();
         ConsoleClockPatch.DayFinished = false;
     }
 }

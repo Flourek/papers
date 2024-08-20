@@ -2,7 +2,6 @@ using app.ent;
 using app.vis;
 using System;
 using HarmonyLib;
-using play.day;
 using play.day.border;
 using psp_papers_mod.Twitch;
 using psp_papers_mod.Utils;
@@ -25,7 +24,7 @@ public static class BorderPatch {
     [HarmonyPrefix]
     [HarmonyPatch("checkSniped", typeof(Person), typeof(PointData), typeof(string))]
     private static bool SnipedPrefix(Person person, PointData pos, string shotAnim, ref bool __result) {
-        if (Attack.wallBlownUp) return true;
+        if (Attack.WallBlownUp) return true;
         if (person.id != "waiting" && person.id != "guard0" && person.id != "guard1") return true;
 
         // Killing the people in queue breaks the game

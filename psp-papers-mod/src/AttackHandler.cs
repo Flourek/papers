@@ -41,7 +41,17 @@ public static class AttackHandler {
             await Task.Delay(randDelay);
         }*/
 
-        BorderPatch.SendChatterRunner();
+        int rand = PapersPSP.Random.Next(4);
+        if (rand == 0) {
+            Patches.Attack.Runner();
+        }else if (rand == 1) {
+            Patches.Attack.Bike();
+        }else if (rand == 2) {
+            Patches.Attack.BikeRunner();
+        }else if (rand == 3) {
+            Patches.Attack.Truck();
+        }
+
     }
 
     internal static bool AttackIfPossible() {
