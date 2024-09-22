@@ -7,13 +7,13 @@ using app;
 using data;
 using System.Threading.Tasks;
 using psp_papers_mod.MonoBehaviour;
+using psp_papers_mod.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using Object = UnityEngine.Object;
 
 namespace psp_papers_mod.Patches;
 
-//todo: raid end day, test day ending by itself, add alarm sounds to raid, fix gun locker  
 
 public class Attack {
     static bool inProgress = false;
@@ -26,17 +26,25 @@ public class Attack {
     private delegate void Delegate();
 
     private static void Start(Delegate attackFunc = null, int attackerCount = 0) {
+        inProgress = true;
+
         // invoke prevents crashes
         if (attackFunc != null) {
             UnityThreadInvoker.Invoke(() => {
                 attackFunc();
             });
         }
+        
+        PaperUtils.Delay(2500).SuccessWithUnityThread(() => {
+            // calling this too early makes Truck not work.
+            BorderPatch.Border.stater.go("ready-to-call", true);
             
-        inProgress = true;
-        EnableRifle();
-        CheckEnemiesDead().SuccessWithUnityThread(() => { });
-        DelayReadyToCall().SuccessWithUnityThread(() => { });
+            // only truck disables shooting
+            if (attackFunc is { Method.Name: "sendTruck" }) {
+                PapersPSP.Log.LogWarning("wah");
+                EnableRifle();
+            }
+        });
         
         Attackers.Clear();
         AliveAttackers.Clear();
@@ -47,8 +55,8 @@ public class Attack {
         }
         AliveAttackers = Attackers;
 
-        string isare = Attackers.Distinct().Count() == 1 ? " is" : " are";
-        string message = AttackerNames(true) + isare + " attacking! MONKA";
+        string isAre = Attackers.Distinct().Count() == 1 ? " is" : " are";
+        string message = AttackerNames(true) + isAre + " attacking! MONKA";
         TwitchIntegration.Message(message);
 
     }
@@ -60,18 +68,11 @@ public class Attack {
 
     // todo: call after each day also reset other fields prolly 
     public static void Reset() {
+        inProgress = false;
         AllowAlarm = false;
         WallBlownUp = false;
         Attackers.Clear();
         AliveAttackers.Clear();
-
-    }
-
-    private static async Task DelayReadyToCall() {
-        // calling this too early causes truck to not work
-        await Task.Delay(2500);
-        EnableRifle();
-        BorderPatch.Border.stater.go("ready-to-call", true);
     }
 
     // todo: prevent attacks from affecting rifle in the first place
@@ -82,31 +83,24 @@ public class Attack {
         BorderPatch.Border.tranqRifleButton.set_state(play.day.border.State.OFF);
     }
 
+    public static void FadeToNight() {
+        End();
+        AttackBorderPatch.ThrewGrenade = true;
+        BorderPatch.Border.stater.go("waiting-to-fade-to-night", true);
+    }
+
     public static void AttackerShot() {
         var attacker = AliveAttackers.Dequeue();
         PapersPSP.Log.LogWarning("SHOT ATTACKER: " + attacker.Username);
         attacker.Shot();
+        
+        if (BorderPatch.Border.checkEnemiesDead()) End();
     }
 
     public static string AttackerNames(bool mention = false) {
         return string.Join(", ", Attackers.Distinct().Select(c => mention ? "@" + c.Username : c.Username));
     }
-
     
-    private static async Task CheckEnemiesDead() {
-        // enemies = ingame, attackers = chatters
-        await Task.Delay(3000);
-        while (true) {
-            if (BorderPatch.Border.checkEnemiesDead()) {
-                End();
-                break;
-            } 
-            await Task.Delay(100);
-        }
-    }
-
-  
-
     public static void Bike() {
         Start(BorderPatch.Border.sendBikeAttack, 1);
     }
@@ -120,6 +114,7 @@ public class Attack {
     
     public static void Truck() {
         Start(BorderPatch.Border.sendTruck, 2);
+  
     }
     
     public static void Raid() {
@@ -130,6 +125,8 @@ public class Attack {
     }
 
     private static async Task RushWallAsync() {
+        inProgress = true;
+        LoopingAlarm().SuccessWithUnityThread(() => {});
 
         UnityThreadInvoker.Invoke(() => {
             AllowPanicOnce = true;
@@ -138,19 +135,24 @@ public class Attack {
 
         await Task.Delay(5000);
 
+        
         UnityThreadInvoker.Invoke(() => {
             var person = BorderPatch.Border.addPerson("Man0", "", "");
             BorderPatch.Border.person_onEvent(person, "truck-blow-wall");
         });
+        
+        await Task.Delay(30000);
+        
+        FadeToNight();
     }
 
-    //private static async Task LoopingAlarm() {
-    //    while (inProgress) {
-    //        PapersPSP.Log.LogWarning("juh");
-    //        BorderPatch.Border.playAlarmSound();
-    //        await Task.Delay(1000);
-    //    }
-    //}
+    private static async Task LoopingAlarm() {
+        while (inProgress) {
+            PapersPSP.Log.LogWarning("juh");
+            PaperUtils.PlaySound("border-alarm");
+            await Task.Delay(2000);
+        }
+    }
 
 
 
@@ -159,7 +161,7 @@ public class Attack {
 
 
 [HarmonyPatch(typeof(Border))]
-public static class AttackBorderPatch {
+internal static class AttackBorderPatch {
     
     public static bool ThrewGrenade;
 
@@ -167,8 +169,6 @@ public static class AttackBorderPatch {
     [HarmonyPatch("checkSniped", typeof(Person), typeof(PointData), typeof(string))]
     private static void SnipedPostfix(Person person, PointData pos, string shotAnim, ref bool __result) {
         if (!__result) return;
-        
-      
     }
     
     [HarmonyPrefix]
@@ -185,7 +185,7 @@ public static class AttackBorderPatch {
         Attack.AllowPanicOnce = false;
         return result;
     }
-
+    
     [HarmonyPrefix]
     [HarmonyPatch("panicLeavingPersonRight")]
     private static bool AvoidSinglePanic() {
@@ -210,9 +210,9 @@ public static class AttackBorderPatch {
 }
 
 [HarmonyPatch(typeof(Person))]
-public class AttackPersonPatch {
+internal class AttackPersonPatch {
 
-    [HarmonyPrefix]
+    [HarmonyPostfix]
     [HarmonyPatch("setAnim", typeof(Anim), typeof(Object))]
     private static void PersonSetAnim(Anim anim, Object movingHorizontal, Person __instance) {
         if (!anim.death) return;
@@ -229,12 +229,12 @@ public class AttackPersonPatch {
 }
 
 [HarmonyPatch(typeof(Stater))]
-public static class StaterPat {
+internal static class StaterPat {
 
     [HarmonyPrefix]
     [HarmonyPatch("go", typeof(string), typeof(Il2CppSystem.Object))]
     private static bool PreventBusy(string name) {
-        // PapersPSP.Log.LogWarning(name);
+        PapersPSP.Log.LogWarning(name);
         
         // Normally attacks only allow you to shoot and do nothing else
         if (name is "busyWithBorder" or "busy-with-border")
@@ -243,6 +243,9 @@ public static class StaterPat {
         return true;
     }
 }
+
+
+
 
 
 

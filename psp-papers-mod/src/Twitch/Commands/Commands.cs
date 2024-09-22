@@ -41,6 +41,8 @@ public static class Commands {
     public static void ForceAttack(Chatter sender, ChatMessage chatMessage, string[] args) {
         if (!sender.Moderator && !sender.Streamer)
             return;
+        
+        if( args[0] is null) return;
 
         string attack = args[0].ToLower();
         switch (attack) {
